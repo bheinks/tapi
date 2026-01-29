@@ -1,5 +1,3 @@
-import java.util.Properties
-
 buildscript {
     repositories {
         mavenCentral()
@@ -17,6 +15,7 @@ plugins {
     alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.jooq.codegen.gradle)
     alias(libs.plugins.flyway)
+    alias(libs.plugins.dotenv.gradle)
 }
 
 group = "dev.heinkel"
@@ -30,12 +29,12 @@ dependencies {
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.content.negotiation)
-    implementation(libs.h2)
     implementation(libs.ktor.server.host.common)
     implementation(libs.ktor.server.status.pages)
     implementation(libs.ktor.server.netty)
     implementation(libs.logback.classic)
     implementation(libs.ktor.server.config.yaml)
+    implementation(libs.ktor.server.di)
     implementation(libs.jooq)
     implementation(libs.postgresql)
     implementation(libs.flyway.database.postgresql)
@@ -44,21 +43,22 @@ dependencies {
 }
 
 flyway {
-    val props = Properties()
-    File(".env").inputStream().use { props.load(it) }
-
-    val postgresHost: String = props.getProperty("POSTGRES_HOST")
-    val postgresDatabase: String = props.getProperty("POSTGRES_DB")
-    val postgresUser: String = props.getProperty("POSTGRES_USER")
-    val postgresPassword: String = props.getProperty("POSTGRES_PASSWORD")
-
-    url = "jdbc:postgresql://$postgresHost:5432/$postgresDatabase?user=$postgresUser&password=$postgresPassword"
+    val host = env.POSTGRES_HOST.value
+    val db = env.POSTGRES_DB.value
+    val user = env.POSTGRES_USER.value
+    val password = env.POSTGRES_PASSWORD.value
+    url = "jdbc:postgresql://$host:5432/$db?user=$user&password=$password"
 }
 
 jooq {
     configuration {
         jdbc {
             url = flyway.url
+        }
+        generator {
+            generate {
+                isPojos = true
+            }
         }
     }
 }

@@ -2,5 +2,15 @@ ktor:
   application:
     modules:
       - dev.heinkel.ApplicationKt.module
+    dependencies:
+      - dev.heinkel.DatabaseKt.provideDslContext
+      - dev.heinkel.model.UserRepository
   deployment:
     port: 8080
+datasource:
+  host: ${POSTGRES_HOST}
+  port: ${POSTGRES_PORT}
+  db: ${POSTGRES_DB}
+  username: ${POSTGRES_USER}
+  password: ${POSTGRES_PASSWORD}
+  schema: ${POSTGRES_SCHEMA}
