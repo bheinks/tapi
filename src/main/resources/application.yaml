@@ -11,6 +11,6 @@ datasource:
   host: ${POSTGRES_HOST}
   port: ${POSTGRES_PORT}
   db: ${POSTGRES_DB}
-  username: ${POSTGRES_USER}
+  user: ${POSTGRES_USER}
   password: ${POSTGRES_PASSWORD}
   schema: ${POSTGRES_SCHEMA}

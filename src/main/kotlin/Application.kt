@@ -1,8 +1,6 @@
 package dev.heinkel
 
-import dev.heinkel.model.UserRepository
-import io.ktor.server.application.*
-import io.ktor.server.plugins.di.dependencies
+import io.ktor.server.application.Application
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
@@ -10,7 +8,5 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     configureSerialization()
-
-    val userRepository: UserRepository by dependencies
-    configureRouting(userRepository)
+    configureRouting()
 }

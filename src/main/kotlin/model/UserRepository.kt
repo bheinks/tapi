@@ -7,8 +7,16 @@ import org.jooq.generated.tabby.tables.pojos.User
 import org.jooq.generated.tabby.tables.User.USER
 
 class UserRepository(val dslContext: DSLContext) {
-    suspend fun allUsers(): List<User> =
+    suspend fun getUsers(): List<User> =
         withContext(Dispatchers.IO) {
-            dslContext.selectFrom(USER).fetchInto(User::class.java)
+            dslContext.selectFrom(USER)
+                .fetchInto(User::class.java)
+        }
+
+    suspend fun getUserByUsername(username: String): User? =
+        withContext(Dispatchers.IO) {
+            dslContext.selectFrom(USER)
+                .where(USER.USERNAME.eq(username))
+                .fetchOneInto(User::class.java)
         }
 }
