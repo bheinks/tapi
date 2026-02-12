@@ -1,4 +1,4 @@
-rootProject.name = "tabby"
+rootProject.name = "tapi"
 
 dependencyResolutionManagement {
     repositories {
